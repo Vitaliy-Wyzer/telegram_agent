@@ -1,0 +1,4 @@
+ollama
+telegram
+python-telegram-bot
+requests
