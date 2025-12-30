@@ -7,7 +7,7 @@ from image_processor import extract_text_from_image, process_image_and_answer
 
 
 class PersistentUserManager:
-    def __init__(self, db_file="data/subscribers.db"):
+    def __init__(self, db_file="data/data.db"):
         self.db_file = db_file
         self.init_database()
     
@@ -21,7 +21,15 @@ class PersistentUserManager:
                 username TEXT,
                 first_name TEXT,
                 last_name TEXT,
-                subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                group_id INTEGER DEFAULT NULL
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS groups (
+                group_id INTEGER NOT NULL,
+                group_name TEXT UNIQUE,
+                hash_code TEXT,
+                FOREIGN KEY (group_id) REFERENCES subscribers(group_id)
             )
         ''')
         conn.commit()
@@ -73,6 +81,9 @@ class PersistentUserManager:
         result = cursor.fetchone() is not None
         conn.close()
         return result
+    
+    def create_group(self):
+        ...
 
 # Initialize persistent user manager
 user_manager = PersistentUserManager()
