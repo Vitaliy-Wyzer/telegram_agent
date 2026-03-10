@@ -33,14 +33,15 @@ def extract_text_from_image(image_bytes: bytes) -> str:
 def process_image_and_answer(raw_text: str) -> str:
     """Single AI call to process image text and answer all questions."""
     prompt = f"""
-Przetwórz ten tekst ze sprawdzianu w odpowiedni kod w języku C++:
+                You will get task question.
 
-{raw_text}
+                {raw_text}
 
-INSTRUKCJE:
-Format odpowiedzi: czysty minimalistyczny kod w języku c++, bez komentarzów
-przed kodem napisz "```c++" i na końcu w nowej linii "```"
-"""
+                INSTRUKCJE:
+                bez komentarzy,
+                sam kod,
+                przed kodem i na końcu dodaj <code>
+                """
     
     try:
         response = ollama.chat(
@@ -50,5 +51,5 @@ przed kodem napisz "```c++" i na końcu w nowej linii "```"
         )
         return response['message']['content'].strip()
     except Exception as e:
-        return f"❌ Błąd AI: {e}"
+        return f"AI Error: {e}"
     
